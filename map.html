@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<iframe src="https://www.google.com/maps/d/embed?mid=zEr1zq_ERUCg.kTS8rJ4BmZMk" width="600" height="480"></iframe>
+
+</body>
+</html>
+
+<script>
+	(function(){
+		var mapConf = {
+			           mapId: ${uuid},
+			           imgSrc: 'http://maps.googleapis.com/maps/api/staticmap?center=Big+Ben&zoom=15&scale=false&size=600x300&maptype=roadmap&format=png&visual_refresh=true&markers=size:mid%7Ccolor:red%7Clabel:1%7CBig+Ben',
+			           embedSrc: '<iframe src=\'https://www.google.com/maps/embed/v1/place?key=${googleApiKey}&q=${query}&attribution_source=Google+Maps+Embed+API&attribution_ios_deep_link_id=comgooglemaps://?daddr=${query}\' frameborder=\'0\' style=\'border:0\'></iframe>'
+		};
+		if(typeof globalSiteSpecificVars.maps!=='undefined' && globalSiteSpecificVars.maps.length > 0){
+			globalSiteSpecificVars.maps.push(mapConf);
+		}else{
+			globalSiteSpecificVars.maps = [mapConf];
+		}
+	})();
+	require(['app/map']);
+</script>
+
+
+new:
+//www.google.com/maps/d/embed?mid=
+
+old:
+<tal:map define="query python:options['query'].replace(' ','+') or 'UCL';
+				uuid python:random.randrange(0,1000000000);
+				googleApiKey string:AIzaSyALHI6A3VL6yQ3Va3-r0hmUo4wcAQrpEsc">
+
+    <tal:block replace="structure string:
+    	<script>
+			(function(){
+				var mapConf = {mapId: ${uuid},imgSrc: 'http://maps.googleapis.com/maps/api/staticmap?center=Big+Ben&zoom=15&scale=false&size=600x300&maptype=roadmap&format=png&visual_refresh=true&markers=size:mid%7Ccolor:red%7Clabel:1%7CBig+Ben',embedSrc: '<iframe src=\'https://www.google.com/maps/embed/v1/place?key=${googleApiKey}&q=${query}&attribution_source=Google+Maps+Embed+API&attribution_ios_deep_link_id=comgooglemaps://?daddr=${query}\' frameborder=\'0\' style=\'border:0\'></iframe>'};
+				if(typeof globalSiteSpecificVars.maps!=='undefined' && globalSiteSpecificVars.maps.length > 0){
+					globalSiteSpecificVars.maps.push(mapConf);
+				}else{
+					globalSiteSpecificVars.maps = [mapConf];
+				}
+			})();
+			require(['app/map']);
+            </script>">
+    </tal:block>
+    <div tal:attributes="class string:map map--${uuid}">
+        <a tal:attributes="href string:https://www.google.co.uk/maps/place/${query}/@51.524559,-0.13404,17z/data=!3m1!4b1!4m2!3m1!1s0x48761b2f69173579:0xd008c67faecc133e?hl=en; class string:map-link map-link--${uuid}">View Map</a>
+    </div>
+</tal:map>
